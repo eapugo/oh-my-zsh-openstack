@@ -1,8 +1,21 @@
 #compdef nova
 #autoload
 
-# python-novaclient completion, based on help file
-# https://github.com/openstack/python-novaclient
+
+__instances() {
+    F=/tmp/os_cache/instances_${OS_TENANT_NAME}
+    declare -a instance_cmd
+    instance_cmd=($(awk '{print $1":"$2}' $F))
+    _describe 'instances' instance_cmd
+}
+
+__secgroups() {
+    F=/tmp/os_cache/secgroups_${OS_TENANT_NAME}
+    declare -a secgroup_cmd
+    secgroup_cmd=($(awk '{print $1":"$2}' $F))
+    _describe 'secgroups' secgroup_cmd
+}
+
 
 local -a _1st_arguments
 _1st_arguments=(
@@ -171,9 +184,10 @@ case "$words[1]" in
     )
     ;;
   boot)
-    _command_args=(
-      '(--falvor)'--falvor"[Flavor ID (see nova flavor-list).]" \
-      '(--image)'--image"[Image ID (see nova image-list).]" \
+    _arguments \
+      '(--flavor)'--flavor"[Flavor ID (see nova flavor-list).]" \
+      '(--image)'--image"[Image ID (see nova image-list).]"
+      __instances \
       '(--num-instances)'--num-instances'[boot multi instances at a time]' \
       '(--meta)'--meta'[Record arbitrary key/value metadata to /meta.js on the new server. Can be specified multiple times.]' \
       '(--file)'--file'[Store arbitrary files from <src-path> locally to <dst-path> on the new server. You may store up to 5 files.]' \
@@ -185,8 +199,7 @@ case "$words[1]" in
       '(--hint)'--hint'[Send arbitrary key/value pairs to the scheduler for custom use.]' \
       '(--nic)'--nic'[Create a NIC on the server.]' \
       '(--config-drive)'--config-drive'[Enable config drive]' \
-      '(--poll)'--poll'[Blocks while instance builds so progress can be reported.]' \
-    )
+      '(--poll)'--poll'[Blocks while instance builds so progress can be reported.]'
     ;;
   console-log)
     _command_args=(
@@ -235,6 +248,11 @@ case "$words[1]" in
       '(--poll)'--poll'[Blocks while instance is rebooting.]' \
     )
     ;;
+
+  secgroup-list-rules)
+    __secgroups
+    ;;
+
   service-list)
     _command_args=(
       '(--host)'--host'[Name of host.]' \
@@ -242,9 +260,9 @@ case "$words[1]" in
     )
     ;;
   show)
-    _command_args=(
-      '(--minimal)'--minimal'[Skips flavor/image lookups when showing instances]' \
-    )
+    _arguments \
+    '(--minimal)'--minimal'[Skips flavor/image lookups when showing instances]'
+    __instances
     ;;
   ssh)
     _command_args=(
