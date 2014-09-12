@@ -9,7 +9,7 @@ It autocompletes nova/glance subcommands, and it also knows about available reso
 In order to take advantage of this, you have to install:
 
 * Particular client tools: python-{nova,glance,neutron}-client.
-* The cache building script (build\_cache.py) from https://github.com/t0mk/openstack-utils as cronjob. It builds the cache so list of resources is available offline.
+* The cache building script ([build\_cache.py|https://github.com/t0mk/openstack-utils/blob/master/build\_cache.py]) from https://github.com/t0mk/openstack-utils as cronjob. It builds the cache so list of resources is available offline.
 
 Installation of this repo:
 
